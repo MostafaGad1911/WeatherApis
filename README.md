@@ -4,6 +4,5 @@
 
 عرض اخر عمليات قام المستخدم بالتقاط صورة اثناء استخدام التطبيق
 
-![image](![image](https://github.com/user-attachments/assets/43a0524f-efde-4576-9901-8c74709021a1)
-)
+![image](https://github.com/user-attachments/assets/43a0524f-efde-4576-9901-8c74709021a1)
 
