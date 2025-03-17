@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WeatherApiCheck</string>
+    <string name="label_wind">الرياح</string>
+    <string name="label_humidity">الرطوبة</string>
+    <string name="label_pressure">الضغط</string>
+    <string name="label_pressure_unit">%1$s مللي بار</string>
+    <string name="label_temp">%1$s ° c</string>
+    <string name="label_speed_value">%1$s كم/س</string>
+    <string name="label_confirm_permissions">تأكيد الصلاحيات</string>
+    <string name="label_app_permissions_warning_msg">يتطلب التطبيق إذن الموقع لعرض بيانات الطقس.</string>
+    <string name="action_ok">موافق</string>
+    <string name="action_cancel">إلغاء</string>
+</resources>
