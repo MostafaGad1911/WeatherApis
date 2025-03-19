@@ -104,47 +104,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkLocationPermission()
-    }
 
-    private fun checkLocationPermission() {
-        when {
-            hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
-                    hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
-                hasPermissions = true
-            }
-
-            shouldShowRationale(Manifest.permission.ACCESS_FINE_LOCATION) ||
-                    shouldShowRationale(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
-                showRationale = true
-            }
-
-            else -> requestLocationPermission()
-        }
-    }
-
-    private fun requestLocationPermission() {
-        locationPermissionLauncher.launch(
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        )
-    }
-
-
-    private fun openAppSettings() {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = Uri.fromParts("package", packageName, null)
-        }
-        startActivity(intent)
-    }
-
-    private fun hasPermission(permission: String) =
-        ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
-
-    private fun shouldShowRationale(permission: String) =
-        ActivityCompat.shouldShowRequestPermissionRationale(this, permission)
 }
