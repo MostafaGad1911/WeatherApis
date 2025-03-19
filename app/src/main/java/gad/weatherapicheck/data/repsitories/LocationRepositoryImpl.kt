@@ -1,5 +1,6 @@
 package gad.weatherapicheck.data.repsitories
 
+import android.content.Context
 import gad.weatherapicheck.data.datasource.local.LocationUtils
 import gad.weatherapicheck.domain.entities.LocationEntity
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -8,9 +9,9 @@ import kotlin.coroutines.resumeWithException
 
 class LocationRepositoryImpl(private val locationUtils: LocationUtils) : LocationRepository {
 
-    override suspend fun getUserLocation(): LocationEntity {
+    override suspend fun getUserLocation(context: Context): LocationEntity {
         return suspendCancellableCoroutine { continuation ->
-            locationUtils.getLastKnownLocation(
+            locationUtils.getLastKnownLocation(context = context,
                 onSuccess = { locationData ->
                     continuation.resume(
                         LocationEntity(

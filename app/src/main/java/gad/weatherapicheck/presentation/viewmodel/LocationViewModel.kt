@@ -27,7 +27,7 @@ class LocationViewModel(
     fun fetchLocation() {
         viewModelScope.launch {
             try {
-                val location = getUserLocationUseCase.invoke()
+                val location = getUserLocationUseCase.invoke(context = application)
                 _locationState.value = location.toLocationData()
             }catch (e: Exception) {
                 e.printStackTrace()

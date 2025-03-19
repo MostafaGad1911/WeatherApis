@@ -13,6 +13,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
 import gad.weatherapicheck.data.model.LocationData
+import gad.weatherapicheck.ui.MainActivity
 
 class LocationUtils(context: Context) {
 
@@ -23,7 +24,7 @@ class LocationUtils(context: Context) {
     @SuppressLint("MissingPermission")
     fun getLastKnownLocation(
         onSuccess: (LocationData) -> Unit,
-        onFailure: (Exception) -> Unit
+        onFailure: (Exception) -> Unit , context: Context
     ) {
         fusedLocationProvider.lastLocation.addOnCompleteListener { task: Task<android.location.Location> ->
             if (task.isSuccessful && task.result != null) {

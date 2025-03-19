@@ -1,17 +1,12 @@
 package gad.weatherapicheck.presentation.ui.weatherdata
 
 import android.Manifest
-import android.content.Context
-import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Environment
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -25,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,13 +31,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -53,7 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -64,11 +54,9 @@ import gad.weatherapicheck.data.model.WeatherResponse
 import gad.weatherapicheck.domain.entities.TempImageEntity
 import gad.weatherapicheck.presentation.composable.RTLComposable
 import gad.weatherapicheck.presentation.viewmodel.ImageViewModel
-import gad.weatherapicheck.presentation.viewmodel.LocationViewModel
-import gad.weatherapicheck.utils.bitmapToUri
+import gad.weatherapicheck.utils.createImageUri
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
-import java.io.File
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -221,34 +209,6 @@ fun WeatherDetails(
 }
 
 
-
-@Composable
-fun WeatherKeyVal(key: String, value: String) {
-    RTLComposable {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = value, fontSize = 20.sp, color = Color.Black, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.width(10.dp))
-            Text(text = key, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = Color.Gray)
-        }
-
-    }
-}
-
-
-
-
-
-fun createImageUri(context: Context): Uri? {
-    val imagesDir = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "MyAppImages")
-    if (!imagesDir.exists()) imagesDir.mkdirs()
-
-    val file = File(imagesDir, "${System.currentTimeMillis()}.jpg")
-    return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-}
 
 
 

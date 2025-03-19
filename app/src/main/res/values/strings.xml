@@ -10,4 +10,17 @@
     <string name="label_app_permissions_warning_msg">يتطلب التطبيق إذن الموقع لعرض بيانات الطقس.</string>
     <string name="action_ok">موافق</string>
     <string name="action_cancel">إلغاء</string>
+
+    <string name="permission_required">الصلاحيات مطلوبة</string>
+    <string name="permission_explanation">يحتاج هذا التطبيق إلى الوصول إلى الموقع ليعمل بشكل صحيح. يرجى السماح بصلاحيات الموقع.</string>
+    <string name="grant_permission">منح الصلاحيات</string>
+    <string name="cancel">إلغاء</string>
+
+    <string name="permission_denied">تم رفض الصلاحيات</string>
+    <string name="permission_denied_explanation">لقد قمت برفض الصلاحيات نهائيًا. يرجى الذهاب إلى الإعدادات وتمكينها يدويًا.</string>
+    <string name="open_settings">فتح الإعدادات</string>
+
+    <string name="permission_request_screen_text">يجب الموافقة على صلاحيات الموقع لاستخدام التطبيق</string>
+    <string name="request_permission">طلب الصلاحيات</string>
+
 </resources>
