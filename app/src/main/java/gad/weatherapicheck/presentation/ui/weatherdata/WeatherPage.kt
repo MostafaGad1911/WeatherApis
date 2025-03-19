@@ -1,8 +1,10 @@
 package gad.weatherapicheck.presentation.ui.weatherdata
 
 import android.Manifest
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -35,6 +37,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +53,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -62,6 +68,7 @@ import gad.weatherapicheck.presentation.viewmodel.LocationViewModel
 import gad.weatherapicheck.utils.bitmapToUri
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
+import java.io.File
 
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -73,34 +80,23 @@ fun WeatherDetails(
 ) {
     val offsetX = remember { Animatable(-1000f) }
     val scope = rememberCoroutineScope()
-
     val context = LocalContext.current
-    val imageBitmap = remember { mutableStateOf<Bitmap?>(null) }
 
-    val cameraPermissionState = rememberPermissionState(
-        permission = Manifest.permission.CAMERA
-    )
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
+    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+    val imageUriState = imagesViewModel.imageUri.collectAsStateWithLifecycle().value
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicturePreview()
-    ) { bitmap ->
-        bitmap?.let {
-            imageBitmap.value = it
-        }
-    }
-
-    LaunchedEffect(imageBitmap.value) {
-        data?.let {
-            imageBitmap.value?.let { bitmap ->
-                val uri = bitmapToUri(context = context, bitmap = bitmap)
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+        if (success) {
+            imageUri.value?.let { uri ->
                 imagesViewModel.insertImage(
-                    image = TempImageEntity(
+                    tempImageEntity = TempImageEntity(
                         uri = uri.toString(),
-                        temp = it.current?.temp_c ?: 0.0,
-                        wind = it.current?.wind_kph ?: 0.0,
-                        humidity = it.current?.humidity ?: 0.0,
-                        pressure = it.current?.pressure_mb ?: 0.0,
-                        weatherStateImage = "https:${data.current?.condition?.icon}".replace("64x64", "128x128")
+                        temp = data?.current?.temp_c ?: 0.0,
+                        wind = data?.current?.wind_kph ?: 0.0,
+                        humidity = data?.current?.humidity ?: 0.0,
+                        pressure = data?.current?.pressure_mb ?: 0.0,
+                        weatherStateImage = "https:${data?.current?.condition?.icon}".replace("64x64", "128x128")
                     )
                 )
             }
@@ -109,10 +105,7 @@ fun WeatherDetails(
 
     LaunchedEffect(Unit) {
         scope.launch {
-            offsetX.animateTo(
-                targetValue = 0f,
-                animationSpec = tween(durationMillis = 600, easing = LinearOutSlowInEasing)
-            )
+            offsetX.animateTo(0f, animationSpec = tween(durationMillis = 600, easing = LinearOutSlowInEasing))
         }
     }
 
@@ -167,27 +160,25 @@ fun WeatherDetails(
             Box(
                 modifier = Modifier.clickable {
                     if (cameraPermissionState.status.isGranted) {
-                        launcher.launch(null)
+                        val uri = createImageUri(context)
+                        if (uri != null) {
+                            imageUri.value = uri
+                            launcher.launch(uri)
+                        }
                     } else {
                         cameraPermissionState.launchPermissionRequest()
                     }
                 },
                 contentAlignment = Alignment.Center
             ) {
-                imageBitmap.value?.let { bitmap ->
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Captured image",
-                        modifier = Modifier
-                            .size(100.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                    )
-                } ?: Image(
-                    painter = painterResource(R.drawable.baseline_linked_camera_24),
-                    contentDescription = "Camera icon",
+                AsyncImage(
+                    model = imageUriState ?: "",
+                    contentDescription = "Captured image",
+                    error = painterResource(R.drawable.baseline_linked_camera_24),
+                    placeholder = painterResource(R.drawable.baseline_linked_camera_24),
                     modifier = Modifier
                         .size(100.dp)
-                        .padding(bottom = 8.dp)
+                        .clip(RoundedCornerShape(12.dp))
                 )
 
                 AsyncImage(
@@ -217,7 +208,8 @@ fun WeatherDetails(
                     stringResource(R.string.label_wind)
                 )
                 WeatherKeyVal(
-                    "${data?.current?.humidity ?: "-"} %", stringResource(R.string.label_humidity)
+                    "${data?.current?.humidity ?: "-"} %",
+                    stringResource(R.string.label_humidity)
                 )
                 WeatherKeyVal(
                     stringResource(R.string.label_pressure_unit, data?.current?.pressure_mb ?: "-"),
@@ -227,6 +219,7 @@ fun WeatherDetails(
         }
     }
 }
+
 
 
 @Composable
@@ -247,6 +240,15 @@ fun WeatherKeyVal(key: String, value: String) {
 
 
 
+
+
+fun createImageUri(context: Context): Uri? {
+    val imagesDir = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "MyAppImages")
+    if (!imagesDir.exists()) imagesDir.mkdirs()
+
+    val file = File(imagesDir, "${System.currentTimeMillis()}.jpg")
+    return FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
+}
 
 
 

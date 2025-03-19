@@ -22,6 +22,9 @@ class ImageViewModel(
     private val _weatherHistory = MutableStateFlow<List<TempImageEntity>>(emptyList())
     val weatherHistory: StateFlow<List<TempImageEntity>> = _weatherHistory.asStateFlow()
 
+    private val _imageUri = MutableStateFlow<String?>(null)
+    val imageUri: StateFlow<String?> = _imageUri.asStateFlow()
+
     fun fetchImages() {
         viewModelScope.launch {
             getAllImagesUseCase().collect { _weatherHistory1 ->
@@ -31,9 +34,10 @@ class ImageViewModel(
         }
     }
 
-    fun insertImage(image: TempImageEntity) {
+    fun insertImage(tempImageEntity: TempImageEntity) {
         viewModelScope.launch {
-            insertImageUseCase(image)
+            _imageUri.value = tempImageEntity.uri
+            insertImageUseCase(tempImageEntity)
             fetchImages()
         }
     }

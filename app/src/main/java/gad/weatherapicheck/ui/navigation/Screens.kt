@@ -1,7 +1,7 @@
 package gad.weatherapicheck.ui.navigation
 
 sealed class Screens(val route: String) {
-    object MyLocation : Screens("my_location")
+    data object MyLocation : Screens("my_location")
 
-    object WeatherHistory : Screens("weather_history")
+    data object WeatherHistory : Screens("weather_history")
 }

@@ -88,22 +88,11 @@ class MainActivity : ComponentActivity() {
                     startDestination = Screens.MyLocation.route
                 ) {
                     composable(Screens.MyLocation.route) {
-                        if (hasPermissions) {
-                            MyLocation(
-                                viewModel = locationViewModel,
-                                weatherViewModel = weatherViewModel
-                            )
-                        } else if (showRationale) {
-                            NeverAskAgainWarning(
-                                onOpenSettings = { openAppSettings() },
-                                onDismiss = {
-                                    showRationale = false
-                                    finish()
-                                }
-                            )
-                        } else {
-                            checkLocationPermission()
-                        }
+                        MyLocation(
+                            viewModel = locationViewModel,
+                            weatherViewModel = weatherViewModel ,
+                            activity = this@MainActivity
+                        )
                     }
                     composable(Screens.WeatherHistory.route) {
                         WeatherHistory(

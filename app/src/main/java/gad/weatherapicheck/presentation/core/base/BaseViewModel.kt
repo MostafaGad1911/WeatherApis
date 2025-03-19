@@ -14,21 +14,11 @@ open class BaseViewModel(
 
 
     fun onBackPressed() {
-        val currentDestination = navController?.currentBackStackEntry?.destination
-        if (currentDestination?.id != navController?.graph?.startDestinationId && currentDestination?.id != null) {
-            navController?.popBackStack(currentDestination.id, inclusive = true, saveState = false)
-        }
-
+       navController?.navigateUp()
     }
 
     fun navigate(route: String) {
-        navController?.navigate(route) {
-            popUpTo(navController?.graph?.startDestinationId!!) {
-                inclusive = true
-                saveState = false
-
-            }
-        }
+        navController?.navigate(route)
     }
 
 
