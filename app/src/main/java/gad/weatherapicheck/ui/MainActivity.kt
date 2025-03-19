@@ -28,6 +28,7 @@ import gad.weatherapicheck.presentation.viewmodel.WeatherViewModel
 import gad.weatherapicheck.ui.navigation.Screens
 import gad.weatherapicheck.ui.theme.WeatherApiCheckTheme
 import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : ComponentActivity() {
 
@@ -63,9 +64,27 @@ class MainActivity : ComponentActivity() {
             WeatherApiCheckTheme {
                 if (hasPermissions) {
                     val navController = rememberNavController()
-                    val imageViewModel = getViewModel<ImageViewModel>()
-                    val locationViewModel = getViewModel<LocationViewModel>()
-                    val weatherViewModel = getViewModel<WeatherViewModel>()
+                    val imageViewModel =
+                        getViewModel<ImageViewModel> {
+                            parametersOf()
+                        }.apply {
+                            updateNavController(navController = navController)
+                            parametersOf(navController)
+                        }
+                    val locationViewModel =
+                        getViewModel<LocationViewModel> {
+                            parametersOf()
+                        }.apply {
+                            updateNavController(navController = navController)
+                            parametersOf(navController)
+                        }
+                    val weatherViewModel =
+                        getViewModel<WeatherViewModel> {
+                            parametersOf()
+                        }.apply {
+                            updateNavController(navController = navController)
+                            parametersOf(navController)
+                        }
 
                     NavHost(
                         navController = navController,
@@ -89,14 +108,20 @@ class MainActivity : ComponentActivity() {
                 if (showPermissionDialog) {
                     PermissionExplanationDialog(
                         onDismiss = { showPermissionDialog = false },
-                        onGrantPermission = { requestLocationPermissions() }
+                        onGrantPermission = {
+                            showPermissionDialog = false
+                            requestLocationPermissions()
+                        }
                     )
                 }
 
                 if (showSettingsDialog) {
                     SettingsRedirectDialog(
                         onDismiss = { showSettingsDialog = false },
-                        onOpenSettings = { openAppSettings() }
+                        onOpenSettings = {
+                            showSettingsDialog = false
+                            openAppSettings()
+                        }
                     )
                 }
             }

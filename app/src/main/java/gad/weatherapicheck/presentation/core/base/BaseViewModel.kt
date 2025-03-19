@@ -18,7 +18,9 @@ open class BaseViewModel(
     }
 
     fun navigate(route: String) {
-        navController?.navigate(route)
+        navController?.navigate(route){
+            restoreState = false
+        }
     }
 
 

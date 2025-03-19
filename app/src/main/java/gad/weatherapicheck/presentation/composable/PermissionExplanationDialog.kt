@@ -24,7 +24,7 @@ fun PermissionExplanationDialog(onDismiss: () -> Unit, onGrantPermission: () -> 
         text = { Text(stringResource(R.string.permission_explanation)) },
         confirmButton = {
             Button(
-                colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF009688)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF009688) , contentColor = Color.White),
                 onClick = onGrantPermission
             ) {
                 Text(stringResource(R.string.grant_permission))
@@ -32,7 +32,7 @@ fun PermissionExplanationDialog(onDismiss: () -> Unit, onGrantPermission: () -> 
         },
         dismissButton = {
             Button(
-                colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF009688)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF009688) , contentColor = Color.White),
                 onClick = onDismiss
             ) {
                 Text(stringResource(R.string.cancel))
@@ -49,7 +49,7 @@ fun SettingsRedirectDialog(onDismiss: () -> Unit, onOpenSettings: () -> Unit) {
         text = { Text(stringResource(R.string.permission_denied_explanation)) },
         confirmButton = {
             Button(
-                colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF009688)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF009688) , contentColor = Color.White),
                 onClick = onOpenSettings
             ) {
                 Text(stringResource(R.string.open_settings))
@@ -57,7 +57,7 @@ fun SettingsRedirectDialog(onDismiss: () -> Unit, onOpenSettings: () -> Unit) {
         },
         dismissButton = {
             Button(
-                colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF009688)),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF009688) , contentColor = Color.White),
                 onClick = onDismiss
             ) {
                 Text(stringResource(R.string.cancel))
@@ -83,7 +83,7 @@ fun RequestPermissionScreen(onRequestPermission: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            colors = ButtonDefaults.buttonColors(contentColor = Color(0xFF009688)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF009688) , contentColor = Color.White),
             onClick = onRequestPermission
         ) {
             Text(stringResource(R.string.request_permission))

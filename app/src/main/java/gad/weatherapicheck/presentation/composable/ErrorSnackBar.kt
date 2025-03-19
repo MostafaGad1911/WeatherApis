@@ -11,15 +11,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import gad.weatherapicheck.R
 
 @Composable
 fun ErrorSnackBar(
     message: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    actionLabel: String? = "إلغاء"
+    actionLabel: String? = stringResource(R.string.action_cancel)
 ) {
     Snackbar(
         modifier = modifier.padding(16.dp),
@@ -34,8 +36,6 @@ fun ErrorSnackBar(
                 }
             }
         },
-        containerColor = MaterialTheme.colorScheme.errorContainer,
-        contentColor = MaterialTheme.colorScheme.onErrorContainer,
     ) {
         Text(
             text = message,

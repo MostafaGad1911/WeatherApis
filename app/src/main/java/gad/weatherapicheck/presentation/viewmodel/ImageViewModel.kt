@@ -36,10 +36,18 @@ class ImageViewModel(
 
     fun insertImage(tempImageEntity: TempImageEntity) {
         viewModelScope.launch {
-            _imageUri.value = tempImageEntity.uri
+            setImageUri(tempImageEntity.uri)
             insertImageUseCase(tempImageEntity)
             fetchImages()
         }
+    }
+
+    fun setImageUri(uri: String?) {
+        _imageUri.value = uri
+    }
+
+    fun resetImageUri() {
+        _imageUri.value = null
     }
 
     fun resetImages() {

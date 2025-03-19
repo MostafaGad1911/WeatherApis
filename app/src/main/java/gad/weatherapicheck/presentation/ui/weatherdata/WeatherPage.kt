@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -91,9 +92,13 @@ fun WeatherDetails(
         }
     }
 
-    LaunchedEffect(Unit) {
+    DisposableEffect(Unit) {
         scope.launch {
             offsetX.animateTo(0f, animationSpec = tween(durationMillis = 600, easing = LinearOutSlowInEasing))
+        }
+
+        onDispose {
+            imagesViewModel.resetImageUri()
         }
     }
 
